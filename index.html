@@ -32,7 +32,7 @@
                         brand: {
                             50: '#f0fdfa',
                             100: '#ccfbf1',
-                            500: '#14b8a6', // Teal
+                            500: '#14b8a6', // Teal Utama
                             600: '#0d9488',
                             900: '#134e4a',
                         },
@@ -86,8 +86,8 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .neon-text {
-            text-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
+        .video-glow {
+            box-shadow: 0 0 30px rgba(20, 184, 166, 0.15);
         }
     </style>
 </head>
@@ -128,10 +128,12 @@
         const IconX = ({ className }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         );
+        const IconPlay = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        );
 
         // --- COMPONENTS ---
 
-        // 1. Navigation
         const Navbar = ({ activeTab, setActiveTab }) => {
             const [isOpen, setIsOpen] = useState(false);
             const menuItems = [
@@ -153,7 +155,6 @@
                                 <span className="font-bold text-xl tracking-tight text-white">Rizky<span className="text-brand-500">Trade</span></span>
                             </div>
                             
-                            {/* Desktop Menu */}
                             <div className="hidden md:block">
                                 <div className="ml-10 flex items-baseline space-x-4">
                                     {menuItems.map((item) => (
@@ -173,7 +174,6 @@
                                 </div>
                             </div>
 
-                            {/* Mobile menu button */}
                             <div className="md:hidden">
                                 <button onClick={() => setIsOpen(!isOpen)} className="text-gray-300 hover:text-white p-2">
                                     {isOpen ? <IconX /> : <IconMenu />}
@@ -181,8 +181,6 @@
                             </div>
                         </div>
                     </div>
-
-                    {/* Mobile Menu Panel */}
                     {isOpen && (
                         <div className="md:hidden glass-panel border-t border-white/5">
                             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -210,20 +208,16 @@
             );
         };
 
-        // 2. Simple Chart Component (SVG based)
         const SimpleChart = () => {
-            // Fake data points
             const points = [10, 25, 18, 40, 35, 60, 55, 80, 70, 95];
             const max = 100;
-            const width = 100; // viewBox width
-            const height = 50; // viewBox height
-            
+            const width = 100;
+            const height = 50;
             const pointsString = points.map((p, i) => {
                 const x = (i / (points.length - 1)) * width;
                 const y = height - (p / max) * height;
                 return `${x},${y}`;
             }).join(' ');
-
             const areaPath = `0,${height} ${pointsString} ${width},${height}`;
 
             return (
@@ -242,7 +236,6 @@
                         <polygon points={areaPath} fill="url(#gradient)" />
                         <polyline points={pointsString} fill="none" stroke="#14b8a6" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                    {/* Grid lines */}
                     <div className="absolute inset-0 pointer-events-none opacity-10">
                         <div className="w-full h-1/4 border-b border-white"></div>
                         <div className="w-full h-2/4 border-b border-white"></div>
@@ -252,7 +245,6 @@
             );
         };
 
-        // 3. Dashboard View
         const Dashboard = () => {
             const [transactions, setTransactions] = useState([
                 { id: 1, pair: 'BTC/USD', type: 'Buy', amount: '$1,200', status: 'Profit', pnl: '+$145.00' },
@@ -262,7 +254,6 @@
 
             return (
                 <div className="space-y-6 animate-fade-in">
-                    {/* Welcome */}
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
                             <h2 className="text-2xl font-bold text-white">Selamat Datang, Trader</h2>
@@ -272,8 +263,6 @@
                             + Deposit Dana
                         </button>
                     </div>
-
-                    {/* Stats Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="glass-panel p-6 rounded-2xl relative overflow-hidden group">
                             <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
@@ -300,13 +289,9 @@
                             <span className="inline-block mt-2 px-2 py-1 bg-purple-500/10 text-purple-400 text-xs rounded-full">High Performance</span>
                         </div>
                     </div>
-
-                    {/* Chart Section */}
                     <div className="glass-panel p-1 rounded-2xl">
                         <SimpleChart />
                     </div>
-
-                    {/* Recent Transactions */}
                     <div className="glass-panel rounded-2xl overflow-hidden">
                         <div className="p-6 border-b border-dark-border flex justify-between items-center">
                             <h3 className="font-semibold text-white">Riwayat Transaksi</h3>
@@ -347,7 +332,7 @@
             );
         };
 
-        // 4. Course View
+        // --- UPDATED COURSE VIEW WITH VIDEO ---
         const Course = () => {
             const courses = [
                 { id: 1, title: 'Trading Fundamentals', level: 'Beginner', duration: '2h 15m', image: 'https://images.unsplash.com/photo-1611974765270-ca12586343bb?auto=format&fit=crop&q=80&w=400' },
@@ -357,12 +342,52 @@
             ];
 
             return (
-                <div className="space-y-6">
-                    <div className="text-center py-8">
+                <div className="space-y-8">
+                    <div className="text-center py-4">
                         <h2 className="text-3xl font-bold text-white mb-2">RizkyTrade Academy</h2>
-                        <p className="text-gray-400">Tingkatkan skill trading Anda dari nol hingga profesional.</p>
+                        <p className="text-gray-400">Pusat pembelajaran trading dari pemula hingga profesional.</p>
+                    </div>
+
+                    {/* NEW: Video Section for Beginners */}
+                    <div className="glass-panel p-6 rounded-2xl border border-brand-500/30 video-glow relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-500/10 blur-[60px] rounded-full pointer-events-none"></div>
+                        
+                        <div className="flex flex-col lg:flex-row gap-8 items-center">
+                            <div className="lg:w-1/2 space-y-4">
+                                <span className="inline-flex items-center gap-2 px-3 py-1 bg-brand-500 text-white text-xs font-bold rounded-full uppercase tracking-wider">
+                                    <IconPlay className="w-3 h-3" fill="currentColor" />
+                                    Spesial Pemula
+                                </span>
+                                <h3 className="text-2xl md:text-3xl font-bold text-white">Langkah Pertama Trading Aman</h3>
+                                <p className="text-gray-300 leading-relaxed">
+                                    Baru mulai? Jangan khawatir. Tonton video panduan singkat 5 menit ini untuk memahami cara membaca grafik dasar, manajemen risiko, dan cara melakukan order pertama Anda tanpa rugi besar.
+                                </p>
+                                <div className="flex gap-4 pt-2">
+                                    <button className="px-6 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-lg font-medium transition-colors flex items-center gap-2">
+                                        Mulai Tonton
+                                    </button>
+                                    <button className="px-6 py-2.5 border border-white/10 hover:bg-white/5 text-white rounded-lg font-medium transition-colors">
+                                        Lihat Silabus
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div className="lg:w-1/2 w-full">
+                                <div className="aspect-video bg-black/50 rounded-xl overflow-hidden border border-white/10 shadow-2xl relative group">
+                                    {/* Placeholder YouTube iframe */}
+                                    <iframe 
+                                        className="w-full h-full"
+                                        src="https://www.youtube.com/embed/p7HKvqRI_Bo" 
+                                        title="Trading for Beginners" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
+                    {/* Course Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {courses.map((course) => (
                             <div key={course.id} className="glass-panel rounded-2xl overflow-hidden hover:translate-y-[-5px] transition-transform duration-300">
@@ -376,7 +401,7 @@
                                     <div className="text-xs font-semibold text-brand-400 mb-1 uppercase tracking-wider">{course.level}</div>
                                     <h3 className="text-lg font-bold text-white mb-4 leading-tight">{course.title}</h3>
                                     <button className="w-full py-2 rounded-lg border border-brand-500/30 text-brand-400 hover:bg-brand-500 hover:text-white transition-all text-sm font-medium">
-                                        Mulai Belajar
+                                        Lanjut Belajar
                                     </button>
                                 </div>
                             </div>
@@ -386,7 +411,6 @@
             );
         };
 
-        // 5. Gallery View
         const Gallery = () => {
             return (
                 <div className="space-y-6">
@@ -410,7 +434,6 @@
             );
         };
 
-        // 6. About View
         const About = () => {
             return (
                 <div className="max-w-4xl mx-auto space-y-12">
@@ -449,7 +472,6 @@
             );
         };
 
-        // 7. Contact View
         const Contact = () => {
             const handleSubmit = (e) => {
                 e.preventDefault();
@@ -488,24 +510,12 @@
                             </button>
                         </form>
                     </div>
-
-                    <div className="mt-8 flex justify-center space-x-8 text-gray-400">
-                        <div className="flex items-center gap-2">
-                            <IconMail className="w-5 h-5" />
-                            <span>support@rizkytrade.com</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <span className="w-5 h-5 flex items-center justify-center font-bold border border-current rounded-full text-xs">IG</span>
-                            <span>@rizkytrade</span>
-                        </div>
-                    </div>
                 </div>
             );
         };
 
-        // --- MAIN APP ---
         const App = () => {
-            const [activeTab, setActiveTab] = useState('dashboard');
+            const [activeTab, setActiveTab] = useState('course'); // Set default to course to show new feature
 
             const renderContent = () => {
                 switch(activeTab) {
@@ -520,16 +530,12 @@
 
             return (
                 <div className="min-h-screen pb-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
-                    {/* Background Glow Effects */}
                     <div className="fixed top-0 left-0 w-96 h-96 bg-brand-500/20 rounded-full blur-[100px] pointer-events-none -translate-x-1/2 -translate-y-1/2"></div>
                     <div className="fixed bottom-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none translate-x-1/2 translate-y-1/2"></div>
-
                     <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-                    
                     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 relative z-10 animate-[fadeIn_0.5s_ease-out]">
                         {renderContent()}
                     </main>
-
                     <footer className="mt-20 border-t border-white/5 py-8 text-center text-gray-500 text-sm relative z-10">
                         <p>&copy; 2024 RizkyTrade Inc. All rights reserved.</p>
                         <p className="mt-2 text-xs">Trading involves significant risk. Invest responsibly.</p>
@@ -543,4 +549,5 @@
     </script>
 </body>
 </html>
+
 
